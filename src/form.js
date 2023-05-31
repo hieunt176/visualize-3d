@@ -377,7 +377,7 @@ $(document).ready(function () {
         Pack.loadPacks();
         // location.reload();
 
-        const get = await fetch("http://localhost:7000/test2", {
+        const get = await fetch("http://localhost:7000/3d", {
             method: "POST",
             // body: JSON.stringify(  {
             //   "vehicle_code": "EXTERNAL_52_0",
