@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/loader.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+  <title>3D Bin Packaging</title>
+</head>
+
+<body>
+
+  <div id="app">
+
+    <div class="threeD-container" id="3D-container">
+
+      <!-- error message -->
+      <div class="error-container error-container--hidden">
+        <div class="error-message">
+          <i class="fa-solid fa-times-circle"></i>
+          <span id="errorMsg"></span>
+        </div>
+      </div>
+      <!-- error message -->
+
+      <!-- loader -->
+      <div class="threeD-container-loader threeD-container-loader--show">
+        <div class="loader-content">
+          <div>Loading</div>
+          <div class="dot-flashing"></div>
+        </div>
+      </div>
+      <!-- loader -->
+
+      <!-- drap/drop controller -->
+      <div class="dragDrop-container dragDrop-container--close hidden" id="dragDrop">
+        <div class="dragDrop-content">
+          <div class="dragDrop-options pointer">
+            <i class="fa-solid fa-keyboard" id="dragDrop-shortcuts"></i>
+          </div>
+
+          <div class="dragDrop-options pointer">
+            <i class="fa-solid fa-trash-can" id="delete-all"></i>
+          </div>
+
+          <div class="dragDrop-options pointer">
+            <i class="fa-solid fa-backward" id="dragDrop-backward"></i>
+          </div>
+
+          <div class="dragDrop-options" id="d-base">
+            <i class="fa-solid fa-cube fa-rotate-270 d-less-opacity"></i>
+            <div class="option-rotation">
+              <i class="fa-solid fa-arrow-rotate-left d-less-opacity"></i>
+              <i class="fa-solid fa-arrow-rotate-right d-less-opacity"></i>
+            </div>
+          </div>
+
+          <div class="dragDrop-options" id="d-right-side">
+            <i class="fa-solid fa-cube d-less-opacity"></i>
+            <div class="option-rotation">
+              <i class="fa-solid fa-arrow-rotate-left d-less-opacity"></i>
+              <i class="fa-solid fa-arrow-rotate-right d-less-opacity"></i>
+            </div>
+          </div>
+
+          <div class="dragDrop-options" id="d-front-side">
+            <i class="fa-solid fa-cube fa-flip-horizontal d-less-opacity"></i>
+            <div class="option-rotation">
+              <i class="fa-solid fa-arrow-rotate-left d-less-opacity"></i>
+              <i class="fa-solid fa-arrow-rotate-right d-less-opacity"></i>
+            </div>
+          </div>
+
+          <div class="dragDrop-options pointer">
+            <i class="fa-solid fa-circle-check" id="d-confirm-result"></i>
+          </div>
+
+          <div class="dragDrop-options pointer" id="openDragger">
+            <i class="fa-solid fa-circle-minus"></i>
+          </div>
+
+        </div>
+
+        <div class="dragDrop-logger">
+          <div class="title"> Dragger </div>
+          <div class="logger-content">
+            <div class="logger-detail">
+              <span class="pack-title" style="text-align: center;">Start Dragging some elements to show details</span>
+              <!-- <span>pack dalla sdoksdok</span> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- drap/drop controller -->
+
+      <!-- menu open icon -->
+      <div class="menuIcon openMenuIcon">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+
+      <!-- menu open icon -->
+
+      <button id="apii">
+        <i class="fa-solid fa-times"></i>
+
+      </button>
+
+      <!-- main menu -->
+      <div class="menu closeMenu">
+
+        <div class="menu-icons">
+          <!-- <div class="menu-icon" id="switchManuelleMode">
+            <i class="fa-solid fa-hand-back-fist"></i>
+          </div> -->
+
+          <div class="menu-icon reset" id="reset">
+            <i class="fa-solid fa-recycle"></i>
+          </div>
+
+          <div class="menu-icon" id="closeMenuIcon">
+            <i class="fa-solid fa-times"></i>
+          </div>
+        </div>
+
+        <h1>Packer <br> Controller</h1>
+        <hr>
+
+        <h3>
+          Scale
+          <span class="scale">
+            1m
+            <i class="fa-solid fa-arrow-right-long"></i>
+            100px
+          </span>
+        </h3>
+
+        <div class="sectionTitle">
+          Load data
+          <div class="line"></div>
+        </div>
+
+        <div class="csv">
+          <div class="formContainer ">
+            <h3 class="packAdd">
+              <span>csv</span>
+              <i class="fa-solid fa-circle-plus" id="openCSV"></i>
+            </h3>
+
+            <div class="formContainerContentClose" id="csv">
+              <p>Please follow the structure of this sample</p>
+              <a href="csv-files/csv-example.csv">csv sample</a>
+              <div class="upload">
+                <p>Upload your file</p>
+                <input type="file" id="actual-btn" hidden />
+                <label for="actual-btn">Choose File</label>
+                <span id="file-chosen">No file chosen</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="api">
+          <div class="formContainer ">
+            <h3 class="packAdd">
+              <span>Api</span>
+              <i class="fa-solid fa-circle-plus" id="openApi"></i>
+            </h3>
+
+            <div class="formContainerContentClose" id="api">
+              <p>Please follow the structure of this api</p>
+              <a target="_blank" href="https://aouladlahceneoussama.github.io/packer-data/data1.json">api example</a>
+
+              <div class="upload">
+                <p>Please insert the url of the api</p>
+                <p class="inputLabel">API URL</p>
+
+                <input type="text" class="input" id="apiUrl" />
+                <button id="loadApi">load</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sectionTitle">
+          Add data manually
+          <div class="line"></div>
+
+        </div>
+
+        <div class="formContainer ">
+          <h3 class="packAdd">
+            <span>Route</span>
+            <i class="fa-solid fa-circle-plus" id="openRoutes"></i>
+          </h3>
+
+          <div class="formContainerContentClose" id="routes">
+            <div id="routesDetails">
+            </div>
+            <form class="packageForm" id="routesForm">
+
+              <div class="routes-number">
+                <div id="routeDecrement" class="route-indicator">-</div>
+                <div>
+                  <input type="number" min="1" value="1" id="routesNumber" disabled>
+                </div>
+                <div id="routeIncrement" class="route-indicator">+</div>
+              </div>
+
+              <div>
+                Route specifications
+              </div>
+
+              <div id="routeInputs">
+                <div class="inputs">
+                  <div>
+                    <p class="inputLabel">From</p>
+                    <input type="text" class="input routeFrom" required>
+                  </div>
+                  <div>
+                    <p class="inputLabel">To</p>
+                    <input type="text" class="input routeTo" required>
+                  </div>
+                  <div>
+                    <p class="inputLabel">Type</p>
+                    <select class="input routeType" required>
+                      <option value="dechargement">D</option>
+                      <option value="chargement">C</option>
+                      <option value="dechargement/chargement">D et C</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn">Add/Update</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="formContainer ">
+          <h3 class="packAdd">
+            <span>Vehicule</span>
+            <i class="fa-solid fa-circle-plus" id="openVehicule"></i>
+          </h3>
+
+          <div class="formContainerContentClose" id="vehicule">
+            <div class="packInfo">
+              <div>
+                Dimensions
+              </div>
+              <div class="packInfo-numbers" id="containerDetails"></div>
+            </div>
+            <form class="packageForm" id="containerForm">
+              <div class="inputs">
+                <div>
+                  <p class="inputLabel">Width</p>
+                  <input type="number" min="0" max="50" step="0.01" id="containerWidth" class="input" required>
+                </div>
+                <div>
+                  <p class="inputLabel">Height </p>
+                  <input type="number" min="0" max="10" step="0.01" id="containerHeight" class="input" required>
+                </div>
+                <div>
+                  <p class="inputLabel">Length </p>
+                  <input type="number" min="0" max="10" step="0.01" id="containerLenght" class="input" required>
+                </div>
+
+
+                <!-- <p class="inputLabel">Capacity </p>
+              <input type="number" min="0" value="0" step="0.01" id="containerCapacity" class="input" required> -->
+              </div>
+              <button class="btn">Add / Update</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="formContainer">
+          <h3 class="packAdd">
+            <span>Colis</span>
+            <i class="fa-solid fa-circle-plus" id="openPackages"></i>
+          </h3>
+          <div class="formContainerContentClose" id="packages">
+            <div id="packageDetails">
+            </div>
+
+            <form class="packageForm" id="packForm">
+              <div class="randomPack">
+                <p>colis data</p>
+                <button type="button" id="random">Random</button>
+              </div>
+              <p class="inputLabel">Label</p>
+              <input type="text" id="packLabel" class="input">
+              <div class="inputs">
+                <div>
+                  <p class="inputLabel">Width</p>
+                  <input type="number" min="0" max="5" step="0.01" id="packWidth" class="input" required>
+                </div>
+                <div>
+                  <p class="inputLabel">Height </p>
+                  <input type="number" min="0" max="4" step="0.01" id="packHeight" class="input" required>
+                </div>
+                <div>
+                  <p class="inputLabel">Length </p>
+                  <input type="number" min="0" max="3" step="0.01" id="packLenght" class="input" required>
+                </div>
+              </div>
+              <div class="inputs">
+                <div>
+                  <p class="inputLabel">Quantity </p>
+                  <input type="number" min="0" id="packQuantity" class="input" required>
+                </div>
+                <div>
+                  <p class="inputLabel">StackingCapacity </p>
+                  <input type="number" min="-1" id="packStackingCapacity" class="input" value="-1" required>
+                </div>
+                <div>
+                  <p class="inputLabel">Priority </p>
+                  <select id="packPriority" class="pack_priorities input" required>
+                  </select>
+                </div>
+              </div>
+
+
+              <p class="inputLabel">Rotation </p>
+              <div>
+                <div>
+                  <input type="checkbox" id="base" role="base" required checked>
+                  <label for="base">Base</label>
+                </div>
+
+                <div>
+                  <input type="checkbox" id="rightSide">
+                  <label for="rightSide">Right side</label>
+                </div>
+
+                <div>
+                  <input type="checkbox" id="frontSide">
+                  <label for="frontSide">Front side</label>
+                </div>
+              </div>
+
+              <button class="btn">Add</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- solving result -->
+        <div class="sectionTitle">
+          Solving result
+          <div class="line"></div>
+
+        </div>
+
+        <div class="formContainer">
+          <h3 class="packAdd">
+            <span>Result</span>
+            <i class="fa-solid fa-circle-plus" id="openResult"></i>
+          </h3>
+          <div class="formContainerContentClose" id="result">
+            <div class="empty-result">
+              Not solved yet
+            </div>
+          </div>
+        </div>
+
+        <!-- export result -->
+        <div class="formContainer">
+          <h3 class="packAdd">
+            <span>Export</span>
+            <i class="fa-solid fa-circle-plus" id="openExport"></i>
+          </h3>
+          <div class="formContainerContentClose" id="files">
+            <div class="empty-result">
+              Not solved yet
+            </div>
+          </div>
+        </div>
+
+        <div class="sectionTitle">
+          Solving Mode
+          <div class="line"></div>
+        </div>
+
+        <div class="solving-mode">
+          <div class="option" id="solve">Automatically</div>
+          <div class="option" id="switchManuelleMode">Manually</div>
+        </div>
+
+        <!-- <div>
+          <input type="checkbox" id="loadBoxes">
+          <span>Load Boxes in container</span>
+        </div> -->
+      </div>
+      <!-- main menu -->
+
+      <!-- camera controller -->
+      <div class="cameraController">
+        <div class="cube">
+          <div class="cube__face cube__face--front" role="front"></div>
+          <div class="cube__face cube__face--back"></div>
+          <div class="cube__face cube__face--right"></div>
+          <div class="cube__face cube__face--left" role="left"></div>
+          <div class="cube__face cube__face--top" role="top"></div>
+          <div class="cube__face cube__face--bottom"></div>
+        </div>
+      </div>
+      <!-- camera controller -->
+
+      <!-- packdetails -->
+      <form class="pack-detail pack-detail-close" id="packDetail">
+
+        <div class="pack-detail-up">
+          <p>Colis Detail <span id="packStatut"></span></p>
+          <i class="fa-solid fa-circle-plus" id="openPackDetail"></i>
+        </div>
+
+        <div class="pack-detail-content">
+
+          <div>
+            <input type="hidden" id="pack_Detail_Id">
+            <p class="inputLabel">Label</p>
+            <input type="text" id="pack_Detail_Label" class="input">
+          </div>
+
+          <div class="inputs">
+            <div>
+              <p class="inputLabel">Width</p>
+              <input type="number" min="0" max="5" step="0.01" id="pack_Detail_Width" class="input" required>
+            </div>
+            <div>
+              <p class="inputLabel">Height </p>
+              <input type="number" min="0" max="4" step="0.01" id="pack_Detail_Height" class="input" required>
+            </div>
+            <div>
+              <p class="inputLabel">Lenght </p>
+              <input type="number" min="0" max="3" step="0.01" id="pack_Detail_Lenght" class="input" required>
+            </div>
+          </div>
+
+          <div class="inputs">
+            <div>
+              <p class="inputLabel">Quantity </p>
+              <input type="number" min="0" id="pack_Detail_Quantity" class="input" required>
+            </div>
+            <div>
+              <p class="inputLabel">StackingCapacity </p>
+              <input type="number" min="-1" id="pack_Detail_StackingCapacity" class="input" required>
+            </div>
+            <div>
+              <p class="inputLabel">Priority </p>
+              <select id="pack_Detail_Priority" class="pack_priorities input" required></select>
+            </div>
+          </div>
+
+          <p class="inputLabel">Rotation </p>
+
+          <div>
+            <div>
+              <input type="checkbox" id="pack_Detail_base">
+              <span class="checkmark"></span>
+              <label for="pack_Detail_base">Base</label>
+            </div>
+
+            <div>
+              <input type="checkbox" id="pack_Detail_right-side">
+              <label for="pack_Detail_right-side">Right side</label>
+            </div>
+
+            <div>
+              <input type="checkbox" id="pack_Detail_front-side">
+              <label for="pack_Detail_front-side">Front side</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub">
+          <div class="sub-title">
+            <p>Advanced parameters</p>
+            <i class="fa-solid fa-angle-down toggleAdvParam--close" id="toggleAdvParam"></i>
+          </div>
+
+          <div class="sub-container sub-container--close">
+
+            <div class="options">
+              <p>Multiple Priorities</p>
+              <i class="fa-solid fa-circle-plus" id="addPrioInputs"></i>
+            </div>
+
+            <div id="multiple-prio">
+
+            </div>
+          </div>
+        </div>
+
+        <div class="pack-detail-down">
+          <button class="btn-update" id="updatePack">Update</button>
+          <button class="btn-delete" id="deletePack">Delete</button>
+        </div>
+
+      </form>
+      <!-- packdetails -->
+
+      <!-- number of boxes controller -->
+      <div class="range hidden">
+        <input type="range" min="0" max="" step="1" value="0" id="numberBox" disabled>
+      </div>
+      <!-- number of boxes controller -->
+
+      <!-- scene player controller -->
+      <div class="scene-player hidden">
+        <div class="player-controls">
+          <i class="fa-solid fa-backward-fast small" id="increase-speed"></i>
+          <i class="fa-solid fa-backward small scene-player--active" id="play-backward"></i>
+          <!-- <i class="fa-solid fa-circle-pause "></i> -->
+          <i class="fa-solid fa-circle-play big" id="play-pause" role="pause"></i>
+          <i class="fa-solid fa-forward small disabled" id="play-forward"></i>
+          <i class="fa-solid fa-forward-fast small" id="decrease-speed"></i>
+        </div>
+      </div>
+      <!-- scene player controller -->
+
+      <!-- logger -->
+      <div class="logger">
+        <div class="sectionTitle">
+          Logs
+          <div class="line"></div>
+        </div>
+        <div class="logMsg">
+        </div>
+      </div>
+      <!-- logger -->
+
+      <!-- Packer loader -->
+      <div class="packer-loader packer-loader--hide">
+
+        <h1>Loading...</h1>
+        <h2>Please be patient it usualy take a few seconds to show results</h2>
+
+        <div class="loader">
+          <div class="item item-1">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-2">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-3">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-4">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-5">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-6">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-7">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-8">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-9">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-10">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-11">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-12">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-13">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-14">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-15">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-16">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-17">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-18">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-19">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-20">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-21">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-22">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-23">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-24">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+          <div class="item item-25">
+            <div class="lighter"></div>
+            <div class="darker"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Packer loader -->
+
+      <!-- guidelines of dragdrop mode -->
+      <div class="guidline-dragdrop-container toggleGuidlines">
+        <div class="guidline-dragdrop-content">
+
+          <div class="text-guidlines">
+
+            <div class="t-guidlline">
+              Click on the boxes to drag it into the container
+              <div class="t-guidline-subDetails">
+                <p>Each box have 3 directions of mouvement</p>
+                <p>Each box have maximum 6 rotations</p>
+              </div>
+            </div>
+
+            <div class="t-guidlline">
+              Check the dragger logs to understand the sitation of the box
+              <div class="t-guidline-subDetails">
+                <p>If all the quantity loaded the box is less opacity</p>
+                <p>If you click and don't dragged means there is no left space in the container</p>
+              </div>
+            </div>
+
+            <div class="t-guidlline">
+              Magnet effect
+              <div class="t-guidline-subDetails">
+                <p>let the box the closest point if found and the box is dragged to that point</p>
+                <p>Each point have it own rotations</p>
+              </div>
+            </div>
+
+            <div class="t-guidlline">
+              Rotate the box
+              <div class="t-guidline-subDetails">
+                <p>Rotation depend on the specification of the pack and the point</p>
+                <p>Each point have the possible rotation for the dragged box</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="keys-guidlines">
+            <div class="key-guidline">
+              <div class="key">DEL</div>
+              <div class="key-desc">Delete the dragged box</div>
+            </div>
+
+            <div class="key-guidline">
+              <div class="key">ESC</div>
+              <div class="key-desc">Reset the dragged box to its initial stat</div>
+            </div>
+
+            <div class="key-guidline">
+              <div class="key">ENTER</div>
+              <div class="key-desc">Confirm the position of the dragged box</div>
+            </div>
+
+            <div class="key-guidline">
+              <div class="key">R</div>
+              <div class="key-desc">Change the rotation of the dragged box</div>
+            </div>
+
+            <div class="key-guidline">
+              <div class="key">X</div>
+              <div class="key-desc">Show/Hide the X axes of the drag controls</div>
+            </div>
+
+            <div class="key-guidline">
+              <div class="key">Y</div>
+              <div class="key-desc">Show/Hide the Y axes of the drag controls</div>
+            </div>
+
+            <div class="key-guidline">
+              <div class="key">Z</div>
+              <div class="key-desc">Show/Hide the Z axes of the drag controls</div>
+            </div>
+
+            <div class="key-guidline">
+              <div class="key">+ | =</div>
+              <div class="key-desc">Maximize the sie of the drag controls</div>
+            </div>
+
+            <div class="key-guidline">
+              <div class="key">- | _</div>Minimize the size of the drag controls
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- guidelines of dragdrop mode -->
+  </div>
+
+  <!-- table to export data to pdf -->
+  <table id="myTable" hidden>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>label</th>
+        <th>Dimensions (W x H x L)</th>
+        <th>Volume (m3)</th>
+        <th>Quantity</th>
+        <th>Loaded</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+  <table id="myContainerTable" hidden>
+    <thead>
+      <tr>
+        <th>Dimensions</th>
+        <th>Capacity (m3)</th>
+        <th>Occuped Volume (%)</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <!-- table to export data to pdf -->
+
+
+  <!-- GSAP Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <!-- GSAP Library -->
+
+  <!-- JQuery Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!-- JQuery Library -->
+
+  <!-- MyScripts -->
+  <script type="module" src="/src/menu.js"></script>
+  <script type="module" src="/src/form.js"></script>
+  <script type="module" src="/main.js"></script>
+  <!-- MyScripts -->
+
+</body>
+
+</html>
